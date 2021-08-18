@@ -153,21 +153,24 @@
 
 <script>
 	function doData(data) {
-		data = data.feed.entry
+		data = data.values;
 		$("div[id^=tem_]").text("").hide();
-		if (data[2].title.$t == 'D1') {
+        const columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+		if (data[2][0]) {
 			for(var r=0; r<data.length; r++) {
-				var cell = data[r]["gs$cell"];
-				$("#tem_" + data[r].title.$t).text(cell["$t"]).show();
-				$("#tem_" + data[r].title.$t + "_b").show();
+                for (var c=0; c<data[r].length; c++) {
+                    var cell = data[r][c];
+                    $("#tem_" + columns[c] + (r + 1). toString()).text(data[r][c]).show();
+                    $("#tem_" + columns[c] + (r + 1). toString() + "_b").show();
+                }
 			}
 		}
     }
 	function refresh() {
 	  	jQuery.ajax({
-	        url: "https://spreadsheets.google.com/feeds/cells/1RYCzqVvf23nT8o_-LI-Q9X6_DiEksN1qO9fZajFUI5I/1/public/values?alt=json-in-script&callback=doData",
+	        url: "https://sheets.googleapis.com/v4/spreadsheets/1RYCzqVvf23nT8o_-LI-Q9X6_DiEksN1qO9fZajFUI5I/values/Sheet1?alt=json&majorDimension=ROWS&key=AIzaSyDkIkUHagTiObaZT1VYe3JkMKxtEPLAMEA&callback=doData",
 	        dataType: 'script',
-	        async: true
+            async: true
     	});
 	}
 	window.setInterval(refresh, 5000);
